@@ -1,9 +1,9 @@
 // app.js
-// Conecta con Supabase y maneja la cascada + registro de cliente + creación de cuenta
+// Registro: cliente + contraseña + cuenta (id_cuenta = tarjeta 16 dígitos)
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// PON tus valores reales (los que ya usas)
+// Tus credenciales (las que ya usabas):
 const SUPABASE_URL = "https://tffkdkilxuruboxexpvr.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmtka2lseHVydWJveGV4cHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODMzNjUsImV4cCI6MjA3NDE1OTM2NX0.msdkjFKsdHcFrk8WdOJr8CfDQw4GT-Rhs0oS9CJI1aA";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -16,31 +16,31 @@ const selectComuna = $("comuna");
 const selectBarrio = $("barrio");
 const msg = $("msg");
 
-// ===== Utilidad: generar número de tarjeta (16 dígitos) =====
+// ===== Generar número de tarjeta único (16 dígitos) =====
 async function generarTarjetaUnica(maxIntentos = 5) {
   for (let i = 0; i < maxIntentos; i++) {
     const num = generar16();
-    // verificar que no exista
+    // Verificar que no exista ya
     const { data, error } = await supabase
       .from("cuenta")
       .select("id_cuenta")
-      .eq("id_cuenta", num)
+      .eq("id_cuenta", num.toString())
       .maybeSingle();
 
-    if (!error && !data) return num; // libre
+    if (!error && !data) return num.toString(); // libre (como string)
   }
   throw new Error("No fue posible generar un número de tarjeta único. Intenta de nuevo.");
 }
 
-// crea 16 dígitos pseudo-aleatorios (prefijo 5223 para que "parezca" tarjeta)
 function generar16() {
   const prefijo = "5223"; // opcional
   let rest = "";
   for (let i = 0; i < 12; i++) rest += Math.floor(Math.random() * 10);
-  return BigInt(prefijo + rest); // cabe en BIGINT
+  // devuelve como BigInt para evitar overflow intermedio
+  return BigInt(prefijo + rest); // e.g., 5223xxxxxxxxxxxx
 }
 
-// Carga inicial
+// Carga inicial de select
 document.addEventListener("DOMContentLoaded", async () => {
   await cargarDepartamentos();
 });
@@ -77,7 +77,7 @@ async function cargarDepartamentos() {
   selectBarrio.disabled = true;
 }
 
-// --- Eventos de cascada ---
+// --- Cascada ---
 selectDepartamento.addEventListener("change", async (e) => {
   const idDep = e.target.value;
   selectMunicipio.disabled = true;
@@ -145,7 +145,7 @@ selectComuna.addEventListener("change", async (e) => {
   selectBarrio.disabled = false;
 });
 
-// --- Envío de formulario: insert en cliente + cuenta ---
+// --- Envío: cliente + contraseña + cuenta ---
 $("form-registro").addEventListener("submit", async (e) => {
   e.preventDefault();
   setMsg("");
@@ -154,9 +154,10 @@ $("form-registro").addEventListener("submit", async (e) => {
   const numero_documento = $("numero_documento").value.trim();
   const nombre_completo = $("nombre_completo").value.trim();
   const numero_telefono = $("numero_telefono").value.trim();
+  const clave_acceso = $("clave_acceso").value.trim(); // NUEVO
   const id_barrio = Number($("barrio").value);
 
-  if (!tipo_documento || !numero_documento || !nombre_completo || !numero_telefono || !id_barrio) {
+  if (!tipo_documento || !numero_documento || !nombre_completo || !numero_telefono || !clave_acceso || !id_barrio) {
     return setMsg("Completa todos los campos.", true);
   }
 
@@ -169,18 +170,29 @@ $("form-registro").addEventListener("submit", async (e) => {
 
   if (e1) return setMsg("Error creando usuario: " + e1.message, true);
 
-  // 2) Generar número de tarjeta único (16 dígitos) = id_cuenta
+  // 2) Guardar contraseña ligada al cliente
+  const ahoraISO = new Date().toISOString();
+  const { error: ePass } = await supabase
+    .from("contrasena")
+    .insert([{
+      id_cliente: cli.id_cliente,
+      clave_acceso,                   // en producción: guardar HASH
+      fecha_inicio_vigencia: ahoraISO,
+      fecha_fin_vigencia: null
+    }]);
+
+  if (ePass) return setMsg("Usuario creado, pero falló guardar la contraseña: " + ePass.message, true);
+
+  // 3) Generar tarjeta y crear cuenta
   let tarjeta;
   try {
     tarjeta = await generarTarjetaUnica();
   } catch (err) {
-    return setMsg(err.message, true);
+    return setMsg("Usuario creado, pero falló la tarjeta: " + err.message, true);
   }
 
-  // 3) Crear cuenta
-  const ahoraISO = new Date().toISOString();
   const nuevaCuenta = {
-    id_cuenta: tarjeta,                // id = tarjeta
+    id_cuenta: tarjeta,                // id = N° tarjeta (string OK para BIGINT)
     id_cliente_titular: cli.id_cliente,
     estado_cuenta: "Activa",
     saldo_actual: 0,
@@ -190,13 +202,11 @@ $("form-registro").addEventListener("submit", async (e) => {
   };
 
   const { error: e2 } = await supabase.from("cuenta").insert([nuevaCuenta]);
-  if (e2) return setMsg("Usuario creado, pero falló la cuenta: " + e2.message, true);
+  if (e2) return setMsg("Usuario y contraseña OK, pero falló la cuenta: " + e2.message, true);
 
-  setMsg(`✅ Usuario y cuenta creados. Nº Tarjeta: ${String(tarjeta)}`);
+  setMsg(`✅ Usuario, contraseña y cuenta creados. Nº Tarjeta: ${tarjeta}`);
   e.target.reset();
-
-  // Reiniciar selects de cascada
-  await cargarDepartamentos();
+  await cargarDepartamentos(); // reiniciar cascada
 });
 
 // Mensajes
