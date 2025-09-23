@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Consultar saldo</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="container balance-grid">
+    <!-- Izquierda: saldo grande -->
+    <section class="balance-left">
+      <h2 class="balance-title">Tu saldo es de:</h2>
+      <div id="saldo-grande" class="saldo-grande">$ —</div>
+
+      <a class="back-home" href="./home.html" title="Volver al menú">
+        <!-- ícono Home -->
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path fill="currentColor" d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-10.5z"/>
+        </svg>
+        Volver al menú
+      </a>
+    </section>
+
+    <!-- Derecha: tarjeta con datos de la cuenta -->
+    <section class="balance-card">
+      <h3>Detalle de tu cuenta</h3>
+
+      <div class="dato">
+        <span>Número tarjeta:</span>
+        <strong id="num-cuenta">—</strong>
+      </div>
+
+      <div class="dato">
+        <span>Estado cuenta:</span>
+        <strong id="estado-cuenta">—</strong>
+      </div>
+
+      <div class="dato">
+        <span>Fecha de apertura:</span>
+        <strong id="fecha-apertura">—</strong>
+      </div>
+    </section>
+
+    <!-- Abajo: costo y tope -->
+    <section class="balance-bottom">
+      <div class="mini">
+        <span>Costo de manejo:</span>
+        <strong id="costo-manejo">—</strong>
+        <hr class="mini-line">
+      </div>
+      <div class="mini">
+        <span>Tope diario:</span>
+        <strong id="tope-diario">—</strong>
+        <hr class="mini-line">
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./saldo.js"></script>
+</body>
+</html>
 
