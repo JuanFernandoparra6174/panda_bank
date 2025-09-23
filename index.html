@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Crear cuenta</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="./img/logo-panda.png" alt="Panda Bank" class="logo">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <section class="left">
+      <img src="./img/panda-login.png" alt="Registro" class="hero-img">
+    </section>
+
+    <section class="right">
+      <div class="card">
+        <h1>Crear cuenta</h1>
+
+        <form id="form-registro">
+          <label for="numero_documento">Documento</label>
+          <input id="numero_documento" name="numero_documento" type="text" placeholder="Ingrese su cédula" required>
+
+          <label for="tipo_documento">Tipo de documento</label>
+          <select id="tipo_documento" name="tipo_documento" required>
+            <option value="">Seleccione…</option>
+            <option value="CC">Cédula</option>
+            <option value="CE">Cédula de extranjería</option>
+            <option value="PP">Pasaporte</option>
+            <option value="NIT">NIT</option>
+          </select>
+
+          <label for="nombre_completo">Nombre completo</label>
+          <input id="nombre_completo" name="nombre_completo" type="text" placeholder="Ingrese su nombre" required>
+
+          <label for="numero_telefono">Número telefónico</label>
+          <input id="numero_telefono" name="numero_telefono" type="tel" placeholder="Ingrese su número" required>
+
+          <!-- Cascada Territorio -->
+          <div class="grid-2">
+            <div>
+              <label for="departamento">Departamento</label>
+              <select id="departamento" required>
+                <option value="">Seleccione…</option>
+              </select>
+            </div>
+            <div>
+              <label for="municipio">Municipio</label>
+              <select id="municipio" required disabled>
+                <option value="">Seleccione…</option>
+              </select>
+            </div>
+            <div>
+              <label for="comuna">Comuna</label>
+              <select id="comuna" required disabled>
+                <option value="">Seleccione…</option>
+              </select>
+            </div>
+            <div>
+              <label for="barrio">Barrio</label>
+              <select id="barrio" required disabled>
+                <option value="">Seleccione…</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn">Crear usuario</button>
+          <p id="msg" class="msg"></p>
+        </form>
+      </div>
+
+      <div class="login-link">
+        <a href="login.html">Ya tengo una cuenta</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Supabase JS (ESM) -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
 
