@@ -1,30 +1,28 @@
 // home.js
-// Lee la sesión del cliente (localStorage) y pinta el nombre.
-// Si no hay sesión, redirige a login.html.
-// Los links son decorativos por ahora; dejamos hooks para implementar.
+// Lee la sesión y muestra el nombre. Activa navegación a Consultar saldo.
 
 const sessionRaw = localStorage.getItem("panda_session");
 if (!sessionRaw) {
   window.location.href = "./login.html";
 }
-
 const session = JSON.parse(sessionRaw || "{}");
 const nombreSpan = document.getElementById("nombre-cliente");
-nombreSpan.textContent = session?.nombre || "Cliente";
+if (nombreSpan) nombreSpan.textContent = session?.nombre || "Cliente";
 
-// (Opcional) acciones futuras
-document.getElementById("link-saldo").addEventListener("click", (e) => {
-  e.preventDefault();
-  alert("Próximo paso: consultar saldo desde Supabase (tabla 'cuenta').");
-});
+const linkSaldo = document.getElementById("link-saldo");
+if (linkSaldo) {
+  linkSaldo.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = "./saldo.html";
+  });
+}
 
-document.getElementById("link-retirar").addEventListener("click", (e) => {
-  e.preventDefault();
-  alert("Próximo paso: retirar (registrar transacción 'Retiro').");
-});
-
-document.getElementById("link-transferir").addEventListener("click", (e) => {
-  e.preventDefault();
-  alert("Próximo paso: transferir (entre cuentas).");
-});
+// Los otros siguen en construcción
+const r = (id, msg) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("click", (e)=>{e.preventDefault(); alert(msg);});
+};
+r("link-retirar","Próximo paso: retirar (registrar transacción y descontar saldo).");
+r("link-transferir","Próximo paso: transferir entre cuentas.");
 
