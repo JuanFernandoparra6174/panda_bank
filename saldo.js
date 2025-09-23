@@ -4,8 +4,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // TU proyecto (mismos valores que ya usas)
-const SUPABASE_URL = "https://tffkdkilxuruboxexpvr.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmtka2lseHVydWJveGV4cHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODMzNjUsImV4cCI6MjA3NDE1OTM2NX0.msdkjFKsdHcFrk8WdOJr8CfDQw4GT-Rhs0oS9CJI1aA";
+const SUPABASE_URL = "https://pccvbzvuolmcaegydsxf.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjY3ZienZ1b2xtY2FlZ3lkc3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg2Njc4NDEsImV4cCI6MjA3NDI0Mzg0MX0.mk6D8JCEaAi4fJKqiGDXTe--DE1DxdObqp9eeNaLMH4";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
