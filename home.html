@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Menú</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="container home-grid">
+    <!-- Izquierda: tarjeta bienvenida -->
+    <section class="welcome-card">
+      <h1>Bienvenido<br><span id="nombre-cliente">Nombre del cliente</span></h1>
+      <img
+        src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/kawaii-cute-anime-panda-otaku-japanese-ramen-noodles-finnly-maria-transparent.png"
+        alt="Bienvenida"
+        class="welcome-img"
+      >
+    </section>
+
+    <!-- Derecha: acciones -->
+    <section class="actions">
+      <a href="#" class="action-item" id="link-saldo">
+        <span class="icon">
+          <!-- billetera -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M3 7a3 3 0 0 1 3-3h9a2 2 0 0 1 2 2v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7zm14 1V6a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v2h12zm-1 8h2a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2v6zm-1-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+          </svg>
+        </span>
+        <span class="text">Consultar saldo</span>
+      </a>
+
+      <hr class="divider">
+
+      <a href="#" class="action-item" id="link-retirar">
+        <span class="icon">
+          <!-- cajero/retirar -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M3 5h18v4H3V5zm2 2v0h14V7H5zM4 11h16a2 2 0 0 1 2 2v5H2v-5a2 2 0 0 1 2-2zm4 2v4h2v-4H8zm4 0v4h2v-4h-2z"/>
+          </svg>
+        </span>
+        <span class="text">Retirar dinero</span>
+      </a>
+
+      <hr class="divider">
+
+      <a href="#" class="action-item" id="link-transferir">
+        <span class="icon">
+          <!-- transferir -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M7 7h8l-2.5-2.5L14 3l5 5-5 5-1.5-1.5L15 9H7V7zm10 10H9l2.5 2.5L10 21l-5-5 5-5 1.5 1.5L9 15h8v2z"/>
+          </svg>
+        </span>
+        <span class="text">Transferir</span>
+      </a>
+    </section>
+  </main>
+
+  <script type="module" src="./home.js"></script>
+</body>
+</html>
 
