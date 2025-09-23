@@ -1,1 +1,96 @@
+:root{
+  --green-header:#A2EF4D;
+  --green-card:#567722;
+  --bg:#ffffff;
+  --text:#0a0a0a;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); }
+
+body, button, input, select, label, a, h1, h2, h3, p {
+  font-family: "Caveat Brush", system-ui, sans-serif;
+}
+
+/* Header */
+.topbar{
+  width:100%;
+  background:var(--green-header);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 20px;
+  position:sticky; top:0; z-index:50;
+}
+.brand{ display:flex; align-items:center; gap:10px; }
+.logo{ width:36px; height:36px; object-fit:contain; }
+.brand-text{ font-size:24px; letter-spacing:1px; }
+.menu a{
+  color:#000; text-decoration:none; margin:0 12px; font-size:22px;
+}
+.menu a:hover{ text-decoration:underline; }
+
+/* Layout */
+.container{
+  max-width:1100px; margin:40px auto; display:grid; grid-template-columns:1fr 1fr; gap:30px; padding:0 16px;
+}
+.left{ display:flex; align-items:center; justify-content:center; }
+.hero-img{ width:100%; max-width:420px; height:auto; }
+
+.right{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+
+.card{
+  width:100%;
+  background:var(--green-card);
+  color:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+.card h1{ margin-top:0; margin-bottom:12px; font-size:32px; }
+
+label{ display:block; margin:10px 0 4px; font-size:22px; }
+input, select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  font-size:20px;
+}
+
+.grid-2{
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+  margin-top:10px;
+}
+
+.btn{
+  margin-top:16px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:24px;
+  background:#A2EF4D;
+  color:#000;
+}
+.btn:hover{ filter:brightness(0.95); }
+
+.login-link{
+  margin-top:8px;
+  font-size:22px;
+}
+.login-link a{ color:#000; text-decoration:underline; }
+
+.msg{
+  margin-top:8px; font-size:20px;
+}
+
+/* Responsive */
+@media (max-width:900px){
+  .container{ grid-template-columns:1fr; }
+  .left{ order:2; }
+  .right{ order:1; }
+}
 
