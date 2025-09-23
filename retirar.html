@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Retirar dinero</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <main class="container withdraw-grid">
+    <h1 class="page-title">Retirar dinero</h1>
+
+    <!-- Panel izquierdo: selección y monto -->
+    <section class="withdraw-panel card">
+      <div class="row">
+        <label for="cajero">Cajero</label>
+        <select id="cajero">
+          <option value="">Seleccione cajero</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="monto">Monto a retirar:</label>
+        <input id="monto" type="text" placeholder="ingrese el monto" inputmode="numeric" autocomplete="off">
+      </div>
+
+      <div class="quick-amounts">
+        <button type="button" class="chip" data-value="100000">100.000</button>
+        <button type="button" class="chip" data-value="250000">250.000</button>
+        <button type="button" class="chip" data-value="500000">500.000</button>
+        <button type="button" class="chip" data-value="1000000">1.000.000</button>
+      </div>
+    </section>
+
+    <!-- Panel derecho: teclado numérico -->
+    <section class="keypad">
+      <h3 class="keypad-title">Tablero de números</h3>
+      <div class="pad">
+        <button class="key">1</button>
+        <button class="key">2</button>
+        <button class="key">3</button>
+        <button class="key">4</button>
+        <button class="key">5</button>
+        <button class="key">6</button>
+        <button class="key">7</button>
+        <button class="key">8</button>
+        <button class="key">9</button>
+        <button class="key action" data-action="clear">C</button>
+        <button class="key">0</button>
+        <button class="key action" data-action="back">←</button>
+      </div>
+    </section>
+
+    <!-- Footer de acciones -->
+    <section class="withdraw-actions">
+      <a class="back-home" href="./home.html" title="Volver al menú">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path fill="currentColor" d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-10.5z"/>
+        </svg>
+        Volver al menú
+      </a>
+
+      <div class="cta">
+        <button id="btn-aceptar" class="btn dark">Aceptar</button>
+        <span class="decor-line"></span>
+        <a id="btn-cancelar" class="cancel" href="./home.html">Cancelar</a>
+      </div>
+
+      <p id="withdraw-msg" class="msg"></p>
+    </section>
+  </main>
+
+  <script type="module" src="./retirar.js"></script>
+</body>
+</html>
 
