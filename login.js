@@ -1,9 +1,9 @@
-
+// login.js
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// PON TUS VALORES
+// Usa tus valores reales
 const SUPABASE_URL = "https://tffkdkilxuruboxexpvr.supabase.co";
-const SUPABASE_ANON_KEY = "TU-ANON-KEY";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmZmtka2lseHVydWJveGV4cHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODMzNjUsImV4cCI6MjA3NDE1OTM2NX0.msdkjFKsdHcFrk8WdOJr8CfDQw4GT-Rhs0oS9CJI1aA";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -20,7 +20,7 @@ form.addEventListener("submit", async (e) => {
 
   if (!usuario || !contrasena) return setMsg("Completa usuario y contraseña.", true);
 
-  // 1) Buscar cliente
+  // 1) Buscar cliente por documento
   const { data: cliente, error: e1 } = await supabase
     .from("cliente")
     .select("id_cliente, numero_documento, nombre_completo")
@@ -42,18 +42,19 @@ form.addEventListener("submit", async (e) => {
   if (e2) return setMsg("Error validando contraseña: " + e2.message, true);
   if (!pass) return setMsg("Contraseña incorrecta.", true);
 
-  // OK
+  // OK: guardar sesión y redirigir
   localStorage.setItem("panda_session", JSON.stringify({
     id_cliente: cliente.id_cliente,
     nombre: cliente.nombre_completo,
     numero_documento: cliente.numero_documento
   }));
 
-  setMsg("✅ Acceso concedido. ¡Bienvenido, " + (cliente.nombre_completo || "cliente") + "!");
-  // window.location.href = "./home.html";
+  setMsg("✅ Acceso concedido. Redirigiendo…");
+  window.location.href = "./home.html";
 });
 
 function setMsg(text, isError=false){
   msg.textContent = text || "";
   msg.style.color = isError ? "#ffeb3b" : "#eaffea";
 }
+
