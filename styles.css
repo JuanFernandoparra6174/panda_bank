@@ -3,6 +3,7 @@
   --green-card:#567722;
   --bg:#ffffff;
   --text:#0a0a0a;
+  --divider:#8fb56a;
 }
 
 *{ box-sizing:border-box; }
@@ -21,21 +22,23 @@ body, button, input, select, label, a, h1, h2, h3, p {
   justify-content:space-between;
   padding:10px 20px;
   position:sticky; top:0; z-index:50;
+  border-bottom-left-radius:18px;
+  border-bottom-right-radius:18px;
 }
 .brand{ display:flex; align-items:center; gap:10px; }
-.logo{ width:40px; height:40px; object-fit:contain; } /* tamaño del logo */
+.logo{ width:40px; height:40px; object-fit:contain; }
 .brand-text{ font-size:24px; letter-spacing:1px; }
 .menu a{
   color:#000; text-decoration:none; margin:0 12px; font-size:22px;
 }
 .menu a:hover{ text-decoration:underline; }
 
-/* Layout */
+/* Layout base (registro / login) */
 .container{
   max-width:1100px; margin:40px auto; display:grid; grid-template-columns:1fr 1fr; gap:30px; padding:0 16px;
 }
 .left{ display:flex; align-items:center; justify-content:center; }
-.hero-img{ width:100%; max-width:420px; height:auto; } /* controla la imagen izquierda */
+.hero-img{ width:100%; max-width:420px; height:auto; }
 
 .right{ display:flex; flex-direction:column; align-items:center; gap:12px; }
 
@@ -87,10 +90,80 @@ input, select{
   margin-top:8px; font-size:20px;
 }
 
+/* ======= Estilos Menú (home) ======= */
+.home-grid{
+  align-items:flex-start;
+}
+
+.welcome-card{
+  background:var(--green-card);
+  color:#fff;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.welcome-card h1{
+  margin:0;
+  text-align:center;
+  font-size:30px;
+  line-height:1.1;
+}
+#welcome-name, #nombre-cliente{
+  font-weight:700;
+}
+.welcome-img{
+  width:100%;
+  max-width:360px;
+  height:auto;
+  border-radius:12px;
+}
+
+.actions{
+  width:100%;
+  align-self:stretch;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:4px 6px;
+}
+.action-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 12px;
+  color:#000;
+  text-decoration:none;
+  font-size:24px;
+  border-radius:12px;
+  transition:transform .06s ease, background .2s ease;
+}
+.action-item:hover{
+  background:#f1f8ea;
+  transform:translateX(2px);
+}
+.icon{
+  display:inline-flex;
+  width:34px; height:34px;
+  align-items:center; justify-content:center;
+  color:#37541f; /* tono más oscuro para el icono */
+}
+.divider{
+  border:none;
+  border-top:2px solid var(--divider);
+  margin:0 8px;
+}
+
 /* Responsive */
 @media (max-width:900px){
   .container{ grid-template-columns:1fr; }
   .left{ order:2; }
   .right{ order:1; }
+  .home-grid{ grid-template-columns:1fr; }
+  .actions{ margin-top:8px; }
 }
+
 
