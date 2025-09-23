@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Iniciar sesión</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="left">
+      <img src="https://tffkdkilxuruboxexpvr.supabase.co/storage/v1/object/public/imagenes/panda-login.png"
+           alt="Iniciar sesión" class="hero-img">
+    </section>
+
+    <section class="right">
+      <div class="card">
+        <h1>Iniciar sesión</h1>
+
+        <form id="form-login">
+          <label for="usuario">Usuario</label>
+          <input id="usuario" name="usuario" type="text" placeholder="ingrese su cédula" required>
+
+          <label for="contrasena">Contraseña</label>
+          <input id="contrasena" name="contrasena" type="password" placeholder="ingrese su contraseña" required>
+
+          <button type="submit" class="btn">Entrar</button>
+          <p id="msg" class="msg"></p>
+        </form>
+      </div>
+
+      <div class="login-link">
+        <span>No estoy registrado </span>
+        <a href="./index.html">Crear usuario</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./login.js"></script>
+</body>
+</html>
 
