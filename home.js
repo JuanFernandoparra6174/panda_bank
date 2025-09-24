@@ -21,6 +21,7 @@ const go = (id, url, fallbackMsg) => {
 
 go("link-saldo", "./saldo.html");
 go("link-retirar", "./retirar.html");
-go("link-transferir", null, "Próximo paso: transferir entre cuentas.");
+go("link-transferir", "./transferir.html");
+
 
 
