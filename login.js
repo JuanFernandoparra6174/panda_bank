@@ -15,15 +15,15 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   setMsg("");
 
-  const usuario = $("usuario").value.trim();       // cédula
+  const usuario = $("usuario").value.trim();       // cédula (numero_documento)
   const contrasena = $("contrasena").value.trim();
 
   if (!usuario || !contrasena) return setMsg("Completa usuario y contraseña.", true);
 
-  // 1) Buscar cliente por documento
+  // 1) Buscar cliente por documento (incluye es_admin)
   const { data: cliente, error: e1 } = await supabase
     .from("cliente")
-    .select("id_cliente, numero_documento, nombre_completo")
+    .select("id_cliente, numero_documento, nombre_completo, es_admin")
     .eq("numero_documento", usuario)
     .maybeSingle();
 
@@ -42,19 +42,21 @@ form.addEventListener("submit", async (e) => {
   if (e2) return setMsg("Error validando contraseña: " + e2.message, true);
   if (!pass) return setMsg("Contraseña incorrecta.", true);
 
-  // OK: guardar sesión y redirigir
+  // 3) Guardar sesión y redirigir según rol
   localStorage.setItem("panda_session", JSON.stringify({
     id_cliente: cliente.id_cliente,
     nombre: cliente.nombre_completo,
-    numero_documento: cliente.numero_documento
+    numero_documento: cliente.numero_documento,
+    es_admin: !!cliente.es_admin
   }));
 
   setMsg("✅ Acceso concedido. Redirigiendo…");
-  window.location.href = "./home.html";
+  window.location.href = cliente.es_admin ? "./admin_home.html" : "./home.html";
 });
 
 function setMsg(text, isError=false){
   msg.textContent = text || "";
   msg.style.color = isError ? "#ffeb3b" : "#eaffea";
 }
+
 
