@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Administrador</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://pccvbzvuolmcaegydsxf.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK</span>
+    </div>
+    <nav class="menu">
+      <a href="#">Misión</a>
+      <a href="#">Visión</a>
+      <a href="#">Sobre nosotros</a>
+    </nav>
+  </header>
+
+  <main class="container home-grid">
+    <!-- Tarjeta izquierda -->
+    <section class="welcome-card" style="align-self:start;">
+      <h1 style="color:#fff; margin:0 0 6px 0; text-align:center;">Bienvenido<br>Administrador</h1>
+      <img
+        src="https://pccvbzvuolmcaegydsxf.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20sept%202025,%2010_28_40.png"
+        alt="Admin"
+        class="welcome-img"
+        style="max-width:320px"
+      >
+    </section>
+
+    <!-- Lista derecha -->
+    <section class="actions" style="align-self:start;">
+      <a class="action-item" id="link-editar-clientes" href="#">
+        <span class="icon">
+          <!-- icono usuarios -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zM8 11c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+          </svg>
+        </span>
+        <span class="text">Editar clientes</span>
+      </a>
+
+      <hr class="divider">
+
+      <a class="action-item" id="link-registro-tx" href="./admin_transacciones.html">
+        <span class="icon">
+          <!-- icono lista -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M3 5h18v2H3V5zm0 6h18v2H3v-2zm0 6h18v2H3v-2z"/>
+          </svg>
+        </span>
+        <span class="text">Registro de transacciones</span>
+      </a>
+
+      <hr class="divider">
+
+      <a class="action-item" id="link-editar-cajeros" href="#">
+        <span class="icon">
+          <!-- icono mapa/cajero -->
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+          </svg>
+        </span>
+        <span class="text">Editar cajeros</span>
+      </a>
+    </section>
+  </main>
+
+  <script type="module" src="./admin_home.js"></script>
+</body>
+</html>
 
