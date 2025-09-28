@@ -42,7 +42,20 @@ form.addEventListener("submit", async (e) => {
   if (e2) return setMsg("Error validando contraseña: " + e2.message, true);
   if (!pass) return setMsg("Contraseña incorrecta.", true);
 
-  // 3) Guardar sesión y redirigir según rol
+  // 3) Si NO es admin, exigir al menos UNA cuenta ACTIVA
+  if (!cliente.es_admin) {
+    const { data: ctas, error: e3 } = await supabase
+      .from("cuenta")
+      .select("id_cuenta")
+      .eq("id_cliente_titular", cliente.id_cliente)
+      .ilike("estado_cuenta", "Activa");
+    if (e3) return setMsg("Error verificando estado de cuenta: " + e3.message, true);
+    if (!ctas || ctas.length === 0) {
+      return setMsg("Su cuenta está desactivada o no tiene cuentas activas. Contacte al administrador.", true);
+    }
+  }
+
+  // 4) Guardar sesión y redirigir según rol
   localStorage.setItem("panda_session", JSON.stringify({
     id_cliente: cliente.id_cliente,
     nombre: cliente.nombre_completo,
@@ -58,5 +71,4 @@ function setMsg(text, isError=false){
   msg.textContent = text || "";
   msg.style.color = isError ? "#ffeb3b" : "#eaffea";
 }
-
 
