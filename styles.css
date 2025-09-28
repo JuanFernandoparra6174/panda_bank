@@ -162,5 +162,23 @@ input, select{
   .pad{ grid-template-columns: repeat(3, 80px); }
   .transfer-grid{ grid-template-columns:1fr; }
 }
+/* ======= Admin – Clientes (CRUD) ======= */
+.admin-clients-grid{
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.admin-form .admin-form-actions{
+  margin-top: 12px; display:flex; gap:10px; align-items:center;
+}
+.btn.danger{
+  background:#ffdddd; color:#a30000;
+}
+.admin-accounts .acc-header{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;
+}
+@media (max-width:900px){
+  .admin-clients-grid{ grid-template-columns:1fr; }
+}
 
 
