@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Editar clientes</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://pccvbzvuolmcaegydsxf.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK – Admin</span>
+    </div>
+    <nav class="menu">
+      <a href="./admin_home.html">Panel</a>
+      <a href="./admin_transacciones.html">Transacciones</a>
+      <a href="./login.html" id="logout">Salir</a>
+    </nav>
+  </header>
+
+  <main class="container admin-clients-grid">
+    <h1 class="page-title">Editar clientes</h1>
+
+    <!-- Formulario -->
+    <section class="card admin-form">
+      <h2 style="margin:0 0 8px 0;">Ficha del cliente</h2>
+      <form id="frm">
+        <input type="hidden" id="id_cliente">
+
+        <div class="grid-2">
+          <div>
+            <label for="tipo_documento">Tipo documento</label>
+            <input id="tipo_documento" placeholder="CC / CE / PP / NIT">
+          </div>
+          <div>
+            <label for="numero_documento">Número documento</label>
+            <input id="numero_documento" placeholder="Documento">
+          </div>
+          <div>
+            <label for="nombre_completo">Nombre completo</label>
+            <input id="nombre_completo" placeholder="Nombre completo">
+          </div>
+          <div>
+            <label for="numero_telefono">Teléfono</label>
+            <input id="numero_telefono" placeholder="Teléfono">
+          </div>
+          <div>
+            <label for="id_barrio">ID Barrio (opcional)</label>
+            <input id="id_barrio" placeholder="id_barrio numérico">
+          </div>
+        </div>
+
+        <div class="admin-form-actions">
+          <button type="submit" class="btn dark" id="btn-guardar">Guardar</button>
+          <button type="button" class="btn" id="btn-nuevo">Nuevo</button>
+          <button type="button" class="btn danger" id="btn-eliminar" disabled>Eliminar</button>
+        </div>
+
+        <p id="form-msg" class="msg"></p>
+      </form>
+    </section>
+
+    <!-- Tabla -->
+    <section class="admin-table-wrap">
+      <div class="admin-filter">
+        <div class="filter-grid">
+          <div>
+            <label for="q">Buscar</label>
+            <input id="q" placeholder="nombre o documento">
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button id="buscar" class="btn dark">Buscar</button>
+          <button id="limpiar" class="btn">Limpiar</button>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Documento</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Cuentas</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="6" style="text-align:center;">Cargando…</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <button id="prev" class="btn">◀</button>
+        <span id="pg" class="pg-info">—</span>
+        <button id="next" class="btn">▶</button>
+      </div>
+    </section>
+
+    <!-- Panel cuentas del cliente -->
+    <section class="card admin-accounts" id="panel-cuentas" style="display:none;">
+      <div class="acc-header">
+        <h2 style="margin:0;">Cuentas del cliente</h2>
+        <button id="cerrar-cuentas" class="btn">Cerrar</button>
+      </div>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID cuenta</th>
+            <th>Estado</th>
+            <th>Saldo</th>
+            <th>Fecha apertura</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-cuentas"></tbody>
+      </table>
+      <p id="cuentas-msg" class="msg"></p>
+    </section>
+  </main>
+
+  <script type="module" src="./admin_clientes.js"></script>
+</body>
+</html>
