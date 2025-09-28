@@ -9,7 +9,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 (function guard(){
   const raw = localStorage.getItem("panda_session");
   if (!raw) return (window.location.href = "./login.html");
-  const ses = JSON.parse(raw);
+  const ses = JSON.parse(raw || "{}");
   if (!ses.es_admin) {
     alert("Acceso solo para administradores");
     window.location.href = "./home.html";
@@ -47,7 +47,7 @@ let total = 0;
 
 // Helpers
 function setFormMsg(t, err=false){ formMsg.textContent = t||""; formMsg.style.color = err ? "#c62828" : "#1b5e20"; }
-function setCtasMsg(t, err=false){ cuentasMsg.textContent = t||""; cuentasMsg.style.color = err ? "#c62828" : "#eaffea"; }
+function setCtasMsg(t, err=false){ cuentasMsg.textContent = t||""; cuentasMsg.style.color = err ? "#c62828" : "#1b5e20"; }
 function resetForm(){
   frm.reset(); id_cliente.value = "";
   btnEliminar.disabled = true;
@@ -118,6 +118,66 @@ function actualizarPager(){
   next.disabled = page >= totalPages;
 }
 
+/** Elimina TODO lo relacionado a un cliente:
+ *  (opcional) transacciones -> cuentas -> contraseñas -> cliente
+ *  Si la tabla 'transaccion' no existe, se ignora esa parte.
+ */
+async function eliminarClienteEnCascada(id){
+  // 1) Traer IDs de cuentas del cliente
+  const { data: cuentas, error: eCtasSel } = await supabase
+    .from("cuenta")
+    .select("id_cuenta")
+    .eq("id_cliente_titular", id);
+
+  if (eCtasSel) throw new Error("Error obteniendo cuentas: " + eCtasSel.message);
+
+  const ids = (cuentas || []).map(c => c.id_cuenta);
+
+  // 2) Intentar borrar transacciones (si la tabla existe)
+  if (ids.length > 0) {
+    try {
+      const lista = ids.join(",");
+      const { error: eTx } = await supabase
+        .from("transaccion")
+        .delete()
+        .or(`id_cuenta_origen.in.(${lista}),id_cuenta_destino.in.(${lista})`);
+      if (eTx) {
+        // Si la relación no existe, ignorar; si es otro error, lanzar
+        const msg = (eTx.message || "").toLowerCase();
+        if (!msg.includes("relation") || !msg.includes("does not exist")) {
+          throw new Error("Error eliminando transacciones: " + eTx.message);
+        }
+      }
+    } catch (err) {
+      const m = String(err.message || err).toLowerCase();
+      if (!(m.includes("relation") && m.includes("does not exist"))) {
+        throw err; // solo ignoramos "relation ... does not exist"
+      }
+    }
+
+    // 3) Borrar cuentas del cliente
+    const { error: eCtasDel } = await supabase
+      .from("cuenta")
+      .delete()
+      .eq("id_cliente_titular", id);
+    if (eCtasDel) throw new Error("Error eliminando cuentas: " + eCtasDel.message);
+  }
+
+  // 4) Borrar contraseñas del cliente
+  const { error: ePwd } = await supabase
+    .from("contrasena")
+    .delete()
+    .eq("id_cliente", id);
+  if (ePwd) throw new Error("Error eliminando contraseñas: " + ePwd.message);
+
+  // 5) Borrar cliente
+  const { error: eCli } = await supabase
+    .from("cliente")
+    .delete()
+    .eq("id_cliente", id);
+  if (eCli) throw new Error("Error eliminando cliente: " + eCli.message);
+}
+
 // Eventos tabla (delegación)
 tbody.addEventListener("click", async (e) => {
   const t = e.target;
@@ -130,13 +190,14 @@ tbody.addEventListener("click", async (e) => {
   }
   if (t.dataset.borrar) {
     const id = Number(t.dataset.borrar);
-    if (!confirm("¿Eliminar cliente y sus contraseñas? (Las cuentas quedarán huérfanas)")) return;
-    const { error: ePwd } = await supabase.from("contrasena").delete().eq("id_cliente", id);
-    if (ePwd) return setFormMsg("Error eliminando contraseñas: "+ePwd.message, true);
-    const { error } = await supabase.from("cliente").delete().eq("id_cliente", id);
-    if (error) return setFormMsg(error.message, true);
-    setFormMsg("Cliente eliminado");
-    cargar(page);
+    if (!confirm("¿Eliminar cliente, sus cuentas (y transacciones si existen) y sus contraseñas?")) return;
+    try {
+      await eliminarClienteEnCascada(id);
+      setFormMsg("Cliente eliminado con todo lo asociado.");
+      cargar(page);
+    } catch (err) {
+      setFormMsg(String(err.message || err), true);
+    }
   }
   if (t.dataset.cuentas) {
     abrirCuentas(Number(t.dataset.cuentas));
@@ -173,15 +234,16 @@ btnNuevo.addEventListener("click", resetForm);
 
 btnEliminar.addEventListener("click", async () => {
   if (!id_cliente.value) return;
-  if (!confirm("¿Eliminar cliente y sus contraseñas?")) return;
+  if (!confirm("¿Eliminar cliente, sus cuentas (y transacciones si existen) y sus contraseñas?")) return;
   const id = Number(id_cliente.value);
-  const { error: ePwd } = await supabase.from("contrasena").delete().eq("id_cliente", id);
-  if (ePwd) return setFormMsg("Error eliminando contraseñas: "+ePwd.message, true);
-  const { error } = await supabase.from("cliente").delete().eq("id_cliente", id);
-  if (error) return setFormMsg(error.message, true);
-  setFormMsg("Cliente eliminado");
-  resetForm();
-  cargar(1);
+  try {
+    await eliminarClienteEnCascada(id);
+    setFormMsg("Cliente eliminado con todo lo asociado.");
+    resetForm();
+    cargar(1);
+  } catch (err) {
+    setFormMsg(String(err.message || err), true);
+  }
 });
 
 // Filtros y pager
@@ -241,7 +303,6 @@ tbodyCtas.addEventListener("click", async (e) => {
     const { error } = await supabase.from("cuenta").update({ estado_cuenta: "Activa" }).eq("id_cuenta", id);
     if (error) return setCtasMsg(error.message, true);
     setCtasMsg("Cuenta activada");
-    // refrescar fila
     t.closest("tr").children[1].textContent = "Activa";
   }
   if (t.dataset.bloquear) {
