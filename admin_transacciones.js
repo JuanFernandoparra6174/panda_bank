@@ -1,4 +1,6 @@
 // admin_transacciones.js
+// Filtro por documento (numero_documento) + fechas, con paginación.
+
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://pccvbzvuolmcaegydsxf.supabase.co";
@@ -19,7 +21,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
 const txBody = $("tx-body");
 const fMsg = $("f-msg");
-const fIdCliente = $("f-id-cliente");
+const fDoc = $("f-doc");
 const fDesde = $("f-fecha-desde");
 const fHasta = $("f-fecha-hasta");
 const btnBuscar = $("btn-buscar");
@@ -72,27 +74,51 @@ async function cargar(p = 1){
   page = Math.max(1, p);
   setFMsg("");
 
-  // Base select con relación a cliente (por FK id_cliente_actor)
+  // 1) Si viene documento, conviértelo en lista de id_cliente
+  let idsActor = null;
+  const doc = fDoc.value.trim();
+  if (doc) {
+    const { data: clientes, error: eCli } = await supabase
+      .from("cliente")
+      .select("id_cliente, numero_documento")
+      .eq("numero_documento", doc);
+
+    if (eCli) {
+      setFMsg("Error buscando cliente por documento: " + eCli.message, true);
+      return;
+    }
+    if (!clientes || clientes.length === 0) {
+      total = 0;
+      pintar([]);
+      actualizarPager();
+      return;
+    }
+    idsActor = clientes.map(c => c.id_cliente);
+  }
+
+  // 2) Base select con relación a cliente (para mostrar nombre y documento)
+  // Nota: el alias 'cliente:cliente' funciona si Supabase detecta la FK id_cliente_actor -> cliente.id_cliente
   let query = supabase
     .from("registro_transacciones")
     .select("id_registro, fecha_hora, monto, id_canal, id_cuenta_origen, id_cuenta_destino, detalle, id_cliente_actor, cliente:cliente(nombre_completo,numero_documento)", { count:"exact" })
     .order("fecha_hora", { ascending: false });
 
-  // Filtros
-  const actor = fIdCliente.value.trim();
-  if (actor) query = query.eq("id_cliente_actor", Number(actor));
+  // Filtro por actor (si hay documento)
+  if (idsActor && idsActor.length > 0) {
+    // Si hay varios IDs (por diferentes tipos de documento), filtramos con IN
+    query = query.in("id_cliente_actor", idsActor);
+  }
 
-  // Fechas
+  // Filtro por fechas
   const d = fDesde.value ? new Date(fDesde.value) : null;
   const h = fHasta.value ? new Date(fHasta.value) : null;
   if (d) query = query.gte("fecha_hora", d.toISOString());
   if (h) {
-    // incluir hasta final del día
     h.setHours(23,59,59,999);
     query = query.lte("fecha_hora", h.toISOString());
   }
 
-  // Paginación
+  // 3) Paginación
   const from = (page-1)*PAGE, to = from + PAGE - 1;
   const { data, error, count } = await query.range(from, to);
   if (error) {
@@ -100,6 +126,7 @@ async function cargar(p = 1){
     txBody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#c62828">${error.message}</td></tr>`;
     return;
   }
+
   total = count || 0;
   pintar(data || []);
   actualizarPager();
@@ -107,7 +134,7 @@ async function cargar(p = 1){
 
 // Eventos
 btnBuscar.addEventListener("click", () => cargar(1));
-btnLimpiar.addEventListener("click", () => { fIdCliente.value=""; fDesde.value=""; fHasta.value=""; cargar(1); });
+btnLimpiar.addEventListener("click", () => { fDoc.value=""; fDesde.value=""; fHasta.value=""; cargar(1); });
 prev.addEventListener("click", () => cargar(page-1));
 next.addEventListener("click", () => cargar(page+1));
 
