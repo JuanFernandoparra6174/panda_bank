@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Editar Cajeros</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://pccvbzvuolmcaegydsxf.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK – Admin</span>
+    </div>
+    <nav class="menu">
+      <a href="./admin_home.html">Panel</a>
+      <a href="./admin_clientes.html">Clientes</a>
+      <a href="./admin_transacciones.html">Transacciones</a>
+      <a href="./login.html" id="logout">Salir</a>
+    </nav>
+  </header>
+
+  <main class="container admin-clients-grid">
+    <h1 class="page-title">Editar cajeros (canales)</h1>
+
+    <!-- Formulario Crear/Editar -->
+    <section class="card admin-form">
+      <h2 style="margin:0 0 8px 0;">Formulario</h2>
+      <form id="frm">
+        <input type="hidden" id="id_canal" />
+
+        <div class="grid-2">
+          <div>
+            <label for="id_barrio">Barrio (FK)</label>
+            <select id="id_barrio">
+              <option value="">Seleccione…</option>
+            </select>
+            <small id="help-barrios" style="display:block;margin-top:4px;">Lista de barrios (primeros 500, ordenados A–Z).</small>
+          </div>
+
+          <div>
+            <label for="indicador_tipo_canal">Tipo de canal</label>
+            <select id="indicador_tipo_canal">
+              <option value="1">ATM</option>
+              <option value="0">Corresponsal</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="direccion_canal">Dirección</label>
+            <input id="direccion_canal" placeholder="Calle 123 #45-67" />
+          </div>
+
+          <div>
+            <label for="estado_canal">Estado</label>
+            <select id="estado_canal">
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="latitud">Latitud</label>
+            <input id="latitud" type="number" step="0.000001" placeholder="6.244203" />
+          </div>
+
+          <div>
+            <label for="longitud">Longitud</label>
+            <input id="longitud" type="number" step="0.000001" placeholder="-75.581211" />
+          </div>
+        </div>
+
+        <div class="admin-form-actions">
+          <button type="submit" class="btn dark" id="btn-guardar">Guardar</button>
+          <button type="button" class="btn" id="btn-nuevo">Nuevo</button>
+          <button type="button" class="btn danger" id="btn-eliminar" disabled>Eliminar</button>
+        </div>
+        <p id="form-msg" class="msg"></p>
+      </form>
+    </section>
+
+    <!-- Filtros -->
+    <section class="card admin-form">
+      <h2 style="margin:0 0 8px 0;">Buscar</h2>
+      <div class="grid-2">
+        <div>
+          <label for="q">Texto (dirección o ID)</label>
+          <input id="q" placeholder="Ej: Calle 10 o 123">
+        </div>
+        <div>
+          <label for="f-estado">Estado</label>
+          <select id="f-estado">
+            <option value="">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <div class="admin-form-actions">
+        <button id="buscar" class="btn dark">Buscar</button>
+        <button id="limpiar" class="btn">Limpiar</button>
+      </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Dirección</th>
+            <th>Ubicación</th>
+            <th>Estado</th>
+            <th>Barrio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="7" style="text-align:center;">Cargando…</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <button id="prev" class="btn">◀</button>
+        <span id="pg" class="pg-info">—</span>
+        <button id="next" class="btn">▶</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./admin_cajeros.js"></script>
+</body>
+</html>
