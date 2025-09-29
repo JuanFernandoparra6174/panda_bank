@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panda Bank – Registro de transacciones</title>
+
+  <!-- Fuente Caveat Brush -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="https://pccvbzvuolmcaegydsxf.supabase.co/storage/v1/object/public/imagenes/logo-panda.png"
+           alt="Panda Bank" class="logo" width="40" height="40">
+      <span class="brand-text">PANDA BANK – Admin</span>
+    </div>
+    <nav class="menu">
+      <a href="./admin_home.html">Panel</a>
+      <a href="./admin_clientes.html">Clientes</a>
+      <a href="./login.html" id="logout">Salir</a>
+    </nav>
+  </header>
+
+  <main class="container admin-clients-grid">
+    <h1 class="page-title">Registro de transacciones</h1>
+
+    <!-- Filtros -->
+    <section class="card admin-form">
+      <h2 style="margin:0 0 8px 0;">Filtro</h2>
+      <div class="grid-2">
+        <div>
+          <label for="f-id-cliente">ID cliente actor</label>
+          <input id="f-id-cliente" placeholder="Ej: 12">
+        </div>
+        <div>
+          <label for="f-fecha-desde">Desde</label>
+          <input id="f-fecha-desde" type="date">
+        </div>
+        <div>
+          <label for="f-fecha-hasta">Hasta</label>
+          <input id="f-fecha-hasta" type="date">
+        </div>
+      </div>
+      <div class="admin-form-actions">
+        <button id="btn-buscar" class="btn dark">Buscar</button>
+        <button id="btn-limpiar" class="btn">Limpiar</button>
+      </div>
+      <p id="f-msg" class="msg"></p>
+    </section>
+
+    <!-- Tabla -->
+    <section class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Fecha/Hora</th>
+            <th>Actor</th>
+            <th>Desde → Hacia</th>
+            <th>Monto</th>
+            <th>Canal</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody id="tx-body">
+          <tr><td colspan="6" style="text-align:center;">Cargando…</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pager">
+        <button id="prev" class="btn">◀</button>
+        <span id="pg" class="pg-info">—</span>
+        <button id="next" class="btn">▶</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./admin_transacciones.js"></script>
+</body>
+</html>
 
