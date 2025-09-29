@@ -119,16 +119,20 @@ function actualizarPager(){
 }
 
 /** Elimina TODO lo relacionado a un cliente:
- *  (opcional) transacciones -> cuentas -> contraseñas -> cliente
- *  Si la tabla 'transaccion' no existe, se ignora esa parte.
+ *  registro_transacciones (actor) -> transacciones -> cuentas -> contraseñas -> cliente
+ *  Si 'transaccion' no existe, se salta esa parte.
  */
 async function eliminarClienteEnCascada(id){
+  // (0) Borrar registros donde este cliente fue el actor
+  try {
+    await supabase.from("registro_transacciones").delete().eq("id_cliente_actor", id);
+  } catch(_) { /* si no existe la tabla, ignorar */ }
+
   // 1) Traer IDs de cuentas del cliente
   const { data: cuentas, error: eCtasSel } = await supabase
     .from("cuenta")
     .select("id_cuenta")
     .eq("id_cliente_titular", id);
-
   if (eCtasSel) throw new Error("Error obteniendo cuentas: " + eCtasSel.message);
 
   const ids = (cuentas || []).map(c => c.id_cuenta);
@@ -142,7 +146,6 @@ async function eliminarClienteEnCascada(id){
         .delete()
         .or(`id_cuenta_origen.in.(${lista}),id_cuenta_destino.in.(${lista})`);
       if (eTx) {
-        // Si la relación no existe, ignorar; si es otro error, lanzar
         const msg = (eTx.message || "").toLowerCase();
         if (!msg.includes("relation") || !msg.includes("does not exist")) {
           throw new Error("Error eliminando transacciones: " + eTx.message);
@@ -151,7 +154,7 @@ async function eliminarClienteEnCascada(id){
     } catch (err) {
       const m = String(err.message || err).toLowerCase();
       if (!(m.includes("relation") && m.includes("does not exist"))) {
-        throw err; // solo ignoramos "relation ... does not exist"
+        throw err;
       }
     }
 
@@ -190,7 +193,7 @@ tbody.addEventListener("click", async (e) => {
   }
   if (t.dataset.borrar) {
     const id = Number(t.dataset.borrar);
-    if (!confirm("¿Eliminar cliente, sus cuentas (y transacciones si existen) y sus contraseñas?")) return;
+    if (!confirm("¿Eliminar cliente, sus registros, transacciones (si existen), cuentas y contraseñas?")) return;
     try {
       await eliminarClienteEnCascada(id);
       setFormMsg("Cliente eliminado con todo lo asociado.");
@@ -234,7 +237,7 @@ btnNuevo.addEventListener("click", resetForm);
 
 btnEliminar.addEventListener("click", async () => {
   if (!id_cliente.value) return;
-  if (!confirm("¿Eliminar cliente, sus cuentas (y transacciones si existen) y sus contraseñas?")) return;
+  if (!confirm("¿Eliminar cliente, sus registros, transacciones (si existen), cuentas y contraseñas?")) return;
   const id = Number(id_cliente.value);
   try {
     await eliminarClienteEnCascada(id);
@@ -322,3 +325,4 @@ cerrarCtas.addEventListener("click", () => {
 
 // Primera carga
 cargar(1);
+
